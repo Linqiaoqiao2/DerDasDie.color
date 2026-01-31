@@ -1,0 +1,11 @@
+# FastAPI backend for file upload and text extraction
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+python-multipart>=0.0.6
+
+# File parsing libraries
+pdfplumber>=0.10.3
+python-docx>=1.1.0
+
+# CORS support
+# (included with fastapi)

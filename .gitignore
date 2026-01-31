@@ -40,3 +40,7 @@ next-env.d.ts
 /data/german-dictionary.db-wal
 /data/german-dictionary.db-shm
 
+# Python virtual environment
+backend/venv/
+__pycache__/
+*.pyc

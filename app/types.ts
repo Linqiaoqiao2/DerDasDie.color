@@ -2,16 +2,15 @@ export interface NounAnalysis {
   original: string
   lemma: string
   gender: 'm' | 'f' | 'n' | 'pl'
-  plural: boolean
-  position?: number
+  position: number
   translation_zh: string
   translation_en: string
 }
 
 export interface ArticleAnalysis {
-  original: string // "der", "die", "das", "den", "dem", "des" 等
+  original: string
   gender: 'm' | 'f' | 'n' | 'pl'
-  position?: number
+  position: number
 }
 
 export interface WordToken {
@@ -25,8 +24,8 @@ export interface WordToken {
 
 export interface DeclensionCase {
   case: 'nominativ' | 'genitiv' | 'dativ' | 'akkusativ'
-  article: string // 定冠词，如 "der", "die", "das", "des", "dem", "den"
-  nounForm: string // 名词的变格形式
+  article: string
+  nounForm: string
 }
 
 export interface DeclensionTable {
@@ -38,5 +37,6 @@ export interface FavoriteWord {
   gender: 'm' | 'f' | 'n' | 'pl'
   original: string
   timestamp: number
+  translation_zh?: string
+  translation_en?: string
 }
-

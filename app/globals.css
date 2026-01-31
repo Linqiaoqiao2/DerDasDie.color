@@ -2,7 +2,80 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-gray-50 text-gray-900;
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap');
+
+:root {
+  --font-primary: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  
+  /* Gender colors */
+  --color-masculine: #0ea5e9; /* sky-500 */
+  --color-feminine: #f472b6; /* pink-400 */
+  --color-neuter: #10b981; /* emerald-500 */
+  --color-plural: #a855f7; /* purple-500 */
+  
+  /* Theme colors */
+  --color-primary: #fbbf24; /* amber-400 */
+  --color-primary-dark: #f59e0b; /* amber-500 */
+  --color-background: #fffbeb; /* amber-50 */
 }
 
+body {
+  font-family: var(--font-primary);
+  @apply bg-amber-50 text-gray-800 antialiased;
+}
+
+/* Perspective for 3D card flips */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-amber-100 rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-amber-300 rounded-full hover:bg-amber-400;
+}
+
+/* Selection color */
+::selection {
+  @apply bg-amber-200 text-amber-900;
+}
+
+/* Focus styles */
+*:focus-visible {
+  @apply outline-none ring-2 ring-amber-400 ring-offset-2;
+}
+
+/* Smooth transitions for interactive elements */
+button, a, input, textarea {
+  @apply transition-all duration-200;
+}
+
+/* Card hover effect */
+.card-hover {
+  @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+}
+
+/* Gender text colors */
+.gender-m { color: var(--color-masculine); }
+.gender-f { color: var(--color-feminine); }
+.gender-n { color: var(--color-neuter); }
+.gender-pl { color: var(--color-plural); }
+
+/* Gender background colors */
+.gender-bg-m { background-color: var(--color-masculine); }
+.gender-bg-f { background-color: var(--color-feminine); }
+.gender-bg-n { background-color: var(--color-neuter); }
+.gender-bg-pl { background-color: var(--color-plural); }

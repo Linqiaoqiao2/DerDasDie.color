@@ -1,519 +1,187 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Star, X } from 'lucide-react'
-import type { NounAnalysis, ArticleAnalysis, WordToken, DeclensionTable, FavoriteWord } from '../types'
+import { useState } from 'react'
+import { useTTS } from '../hooks/useTTS'
+import { useFavorites } from '../hooks/useFavorites'
+import { useLanguage } from '../i18n'
+import LanguageSwitcher from './LanguageSwitcher'
+import { CatIcon, PawIcon, StarIcon, VolumeIcon, XIcon, ArrowLeftIcon } from './Icons'
 
-interface ReadingModeProps {
-  originalText: string
-  nouns: NounAnalysis[]
-  articles: ArticleAnalysis[]
-  onBack: () => void
-}
+const colors: Record<string, string> = { m: 'text-sky-500', f: 'text-rose-400', n: 'text-emerald-500', pl: 'text-purple-500' }
+const labels: Record<string, string> = { m: 'der', f: 'die', n: 'das', pl: 'die' }
 
-const genderColors = {
-  m: 'text-blue-600 hover:text-blue-700',
-  f: 'text-red-500 hover:text-red-600',
-  n: 'text-green-600 hover:text-green-700',
-}
+export default function ReadingMode({ originalText, nouns, articles, onBack }: { originalText: string; nouns: any[]; articles: any[]; onBack: () => void }) {
+  const { t } = useLanguage()
+  const { speak, isSpeaking } = useTTS()
+  const { toggleFavorite, isFavorited } = useFavorites()
+  const [selected, setSelected] = useState<any>(null)
+  const [declension, setDeclension] = useState<any>(null)
+  const [loading, setLoading] = useState(false)
 
-const genderLabels = {
-  m: 'der',
-  f: 'die',
-  n: 'das',
-}
-
-export default function ReadingMode({ originalText, nouns, articles, onBack }: ReadingModeProps) {
-  const [selectedNoun, setSelectedNoun] = useState<NounAnalysis | null>(null)
-  const [declensionTable, setDeclensionTable] = useState<DeclensionTable | null>(null)
-  const [favorites, setFavorites] = useState<FavoriteWord[]>([])
-  const [isLoadingDeclension, setIsLoadingDeclension] = useState(false)
-
-  // Load favorites from localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem('derdiedas-favorites')
-    if (saved) {
-      try {
-        setFavorites(JSON.parse(saved))
-      } catch (e) {
-        console.error('Failed to load favorites:', e)
-      }
-    }
-  }, [])
-
-  // Save favorites to localStorage
-  const saveFavorites = (newFavorites: FavoriteWord[]) => {
-    setFavorites(newFavorites)
-    localStorage.setItem('derdiedas-favorites', JSON.stringify(newFavorites))
-  }
-
-  // Check if word is favorited
-  const isFavorited = (lemma: string) => {
-    return favorites.some((fav) => fav.lemma === lemma)
-  }
-
-  // Toggle favorite
-  const toggleFavorite = (noun: NounAnalysis) => {
-    const newFavorites = [...favorites]
-    const existingIndex = newFavorites.findIndex((fav) => fav.lemma === noun.lemma)
-
-    if (existingIndex >= 0) {
-      newFavorites.splice(existingIndex, 1)
-    } else {
-      newFavorites.push({
-        lemma: noun.lemma,
-        gender: noun.gender,
-        original: noun.original,
-        timestamp: Date.now(),
-      })
-    }
-
-    saveFavorites(newFavorites)
-  }
-
-  // Check if word is an adjective (like city names + -er)
-  const isAdjective = (noun: NounAnalysis): boolean => {
-    const lemma = noun.lemma.toLowerCase()
-    const original = noun.original.toLowerCase()
-    
-    // Check for city name + -er pattern (e.g., Berliner, Münchner, Hamburger)
-    // These are typically adjectives derived from city names
-    const cityAdjectivePattern = /^(berlin|münchen|hamburg|köln|frankfurt|stuttgart|düsseldorf|dortmund|essen|leipzig|bremen|dresden|hannover|nürnberg|duisburg|bochum|wuppertal|bielefeld|bonn|münster|karlsruhe|mannheim|augsburg|wiesbaden|gelsenkirchen|mönchengladbach|braunschweig|chemnitz|kiel|aachen|halle|magdeburg|freiburg|krefeld|lübeck|oberhausen|erfurt|mainz|rostock|kassel|hagen|hamm|saarbrücken|mülheim|potsdam|ludwigshafen|oldenburg|leverkusen|osnabrück|solingen|heidelberg|herne|neuss|darmstadt|paderborn|regensburg|ingolstadt|würzburg|fürth|wolfsburg|offenbach|ulm|heilbronn|pforzheim|göttingen|bottrop|trier|recklinghausen|reutlingen|bremerhaven|koblenz|bergisch|gladbach|remscheid|jena|erlangen|moers|siegen|hildesheim|salzgitter)er$/i
-    
-    if (cityAdjectivePattern.test(lemma) || cityAdjectivePattern.test(original)) {
-      return true
-    }
-    
-    return false
-  }
-
-  // Fetch declension table from API
-  const fetchDeclension = async (noun: NounAnalysis) => {
-    setIsLoadingDeclension(true)
+  const fetchDeclension = async (noun: any) => {
+    setLoading(true)
     try {
-      const response = await fetch('/api/declension', {
+      const res = await fetch('/api/declension', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          lemma: noun.lemma,
-          gender: noun.gender,
-          original: noun.original,
-          plural: noun.plural,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lemma: noun.lemma, gender: noun.gender, original: noun.original }),
       })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to fetch declension')
-      }
-
-      setDeclensionTable(data)
-    } catch (error) {
-      console.error('Failed to fetch declension:', error)
-      setDeclensionTable(null)
-    } finally {
-      setIsLoadingDeclension(false)
-    }
+      if (res.ok) setDeclension(await res.json())
+    } finally { setLoading(false) }
   }
 
-  // Handle noun click
-  const handleNounClick = (noun: NounAnalysis) => {
-    // Skip plural nouns (pl)
-    if (noun.gender === 'pl') {
-      return
-    }
-    
-    // Check if it's an adjective
-    if (isAdjective(noun)) {
-      // Show a message that it's an adjective, not a noun
-      alert(`"${noun.original}" 是一个形容词（Adjektiv），不是名词。\n\n例如："Berliner" 是 "来自柏林的" 的意思，是形容词形式。\n\n真正的名词是它后面修饰的那个词。`)
-      return
-    }
-    
-    setSelectedNoun(noun)
+  const handleClick = (noun: any) => {
+    if (noun.gender === 'pl') return
+    setSelected(noun)
     fetchDeclension(noun)
   }
 
-  // Parse text into tokens
-  const parseText = (): WordToken[] => {
-    const tokens: WordToken[] = []
-    const text = originalText
+  const close = () => { setSelected(null); setDeclension(null) }
 
-    // Create sorted arrays with positions
-    const sortedNouns = nouns
-      .filter((noun) => noun.position !== undefined)
-      .sort((a, b) => (a.position || 0) - (b.position || 0))
-
-    const sortedArticles = articles
-      .filter((article) => article.position !== undefined)
-      .sort((a, b) => (a.position || 0) - (b.position || 0))
-
-    // Track which items have been used
-    const usedNouns = new Set<number>()
-    const usedArticles = new Set<number>()
-
-    // Build maps for quick lookup
-    const nounMap = new Map<number, { noun: NounAnalysis; index: number }>()
-    sortedNouns.forEach((noun, idx) => {
-      if (noun.position !== undefined) {
-        nounMap.set(noun.position, { noun, index: idx })
+  const parseText = () => {
+    const tokens: any[] = []
+    const usedN = new Set<number>(), usedA = new Set<number>()
+    
+    originalText.split(/(\s+)/).forEach((word, idx) => {
+      if (!word.trim()) { tokens.push({ text: word, isNoun: false, index: idx }); return }
+      const clean = word.replace(/[.,!?;:()\[\]{}'"]/g, '').toLowerCase()
+      
+      for (let i = 0; i < nouns.length; i++) {
+        if (!usedN.has(i) && clean === nouns[i].original.toLowerCase()) {
+          tokens.push({ text: word, isNoun: true, nounData: nouns[i], index: idx })
+          usedN.add(i); return
+        }
       }
+      for (let i = 0; i < articles.length; i++) {
+        if (!usedA.has(i) && clean === articles[i].original.toLowerCase()) {
+          tokens.push({ text: word, isNoun: false, isArticle: true, articleData: articles[i], index: idx })
+          usedA.add(i); return
+        }
+      }
+      tokens.push({ text: word, isNoun: false, index: idx })
     })
-
-    const articleMap = new Map<number, { article: ArticleAnalysis; index: number }>()
-    sortedArticles.forEach((article, idx) => {
-      if (article.position !== undefined) {
-        articleMap.set(article.position, { article, index: idx })
-      }
-    })
-
-    // Split text into words while preserving spaces and punctuation
-    const wordRegex = /(\S+|\s+)/g
-    let match
-
-    while ((match = wordRegex.exec(text)) !== null) {
-      const word = match[0]
-      const wordStart = match.index
-      const wordEnd = wordStart + word.length
-
-      // Skip whitespace-only tokens
-      if (!word.trim()) {
-        tokens.push({
-          text: word,
-          isNoun: false,
-          index: wordStart,
-        })
-        continue
-      }
-
-      // Clean word for matching (remove punctuation)
-      const cleanWord = word.replace(/[.,!?;:()\[\]{}'"]/g, '')
-      const cleanWordLower = cleanWord.toLowerCase()
-
-      // Try to match article first (articles usually come before nouns)
-      let matchedArticle: ArticleAnalysis | undefined
-      let matchedArticleIndex = -1
-
-      // Check for article at this position
-      for (let pos = wordStart; pos < wordEnd; pos++) {
-        const articleEntry = articleMap.get(pos)
-        if (articleEntry && !usedArticles.has(articleEntry.index)) {
-          const article = articleEntry.article
-          const articleLower = article.original.toLowerCase().trim()
-          
-          if (cleanWordLower === articleLower) {
-            matchedArticle = article
-            matchedArticleIndex = articleEntry.index
-            break
-          }
-        }
-      }
-
-      // If no exact position match for article, try overlap
-      if (!matchedArticle) {
-        for (let i = 0; i < sortedArticles.length; i++) {
-          if (usedArticles.has(i)) continue
-          
-          const article = sortedArticles[i]
-          const articleLower = article.original.toLowerCase().trim()
-          const articleStart = article.position || 0
-          const articleEnd = articleStart + article.original.length
-
-          const overlaps = (wordStart < articleEnd && wordEnd > articleStart)
-          
-          if (overlaps && cleanWordLower === articleLower) {
-            matchedArticle = article
-            matchedArticleIndex = i
-            break
-          }
-        }
-      }
-
-      // Try to match noun
-      let matchedNoun: NounAnalysis | undefined
-      let matchedNounIndex = -1
-
-      // First, try exact position match
-      for (let pos = wordStart; pos < wordEnd; pos++) {
-        const nounEntry = nounMap.get(pos)
-        if (nounEntry && !usedNouns.has(nounEntry.index)) {
-          const noun = nounEntry.noun
-          const nounLower = noun.original.toLowerCase().trim()
-          
-          if (cleanWordLower === nounLower) {
-            matchedNoun = noun
-            matchedNounIndex = nounEntry.index
-            break
-          }
-        }
-      }
-
-      // If no exact match, try position-based overlap
-      if (!matchedNoun) {
-        for (let i = 0; i < sortedNouns.length; i++) {
-          if (usedNouns.has(i)) continue
-          
-          const noun = sortedNouns[i]
-          const nounLower = noun.original.toLowerCase().trim()
-          const nounStart = noun.position || 0
-          const nounEnd = nounStart + noun.original.length
-
-          const overlaps = (wordStart < nounEnd && wordEnd > nounStart)
-          
-          if (overlaps) {
-            if (cleanWordLower === nounLower) {
-              matchedNoun = noun
-              matchedNounIndex = i
-              break
-            }
-            if (cleanWordLower.startsWith(nounLower) || nounLower.startsWith(cleanWordLower)) {
-              matchedNoun = noun
-              matchedNounIndex = i
-              break
-            }
-          }
-        }
-      }
-
-      // Create token - prioritize noun over article if both match
-      if (matchedNoun && matchedNounIndex >= 0) {
-        tokens.push({
-          text: word,
-          isNoun: true,
-          nounData: matchedNoun,
-          index: wordStart,
-        })
-        usedNouns.add(matchedNounIndex)
-      } else if (matchedArticle && matchedArticleIndex >= 0) {
-        tokens.push({
-          text: word,
-          isNoun: false,
-          isArticle: true,
-          articleData: matchedArticle,
-          index: wordStart,
-        })
-        usedArticles.add(matchedArticleIndex)
-      } else {
-        tokens.push({
-          text: word,
-          isNoun: false,
-          index: wordStart,
-        })
-      }
-    }
-
     return tokens
   }
 
-  const tokens = parseText()
+  const caseNames: Record<string, string> = { nominativ: t.cases.nominativ, genitiv: t.cases.genitiv, dativ: t.cases.dativ, akkusativ: t.cases.akkusativ }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-4xl mx-auto">
-        <button
-          onClick={onBack}
-          className="mb-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors"
-        >
-          ← 返回编辑
-        </button>
+    <div className="min-h-screen bg-amber-50" style={{ fontFamily: "'Nunito', sans-serif" }}>
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <PawIcon className="absolute top-20 left-10 w-8 h-8 text-amber-200 rotate-[-20deg]" />
+        <PawIcon className="absolute top-40 right-20 w-6 h-6 text-rose-200 rotate-[15deg]" />
+        <PawIcon className="absolute bottom-32 left-20 w-10 h-10 text-sky-200 rotate-[-10deg]" />
+      </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <h2 className="text-2xl font-bold mb-6">阅读模式</h2>
-
-          {/* Color Legend */}
-          <div className="mb-6 p-4 bg-gray-100 rounded-lg">
-            <p className="text-sm font-semibold mb-2">词性颜色说明：</p>
-            <div className="flex flex-wrap gap-4 text-sm">
-              <span className="text-blue-600 font-medium">der (Maskulin)</span>
-              <span className="text-red-500 font-medium">die (Feminin)</span>
-              <span className="text-green-600 font-medium">das (Neutrum)</span>
+      <div className="relative z-10 p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center justify-between mb-6">
+            <button onClick={onBack} className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-amber-50 rounded-full shadow-md font-semibold text-gray-700">
+              <ArrowLeftIcon className="w-5 h-5" /> {t.reading.backToEdit}
+            </button>
+            <div className="flex items-center gap-3">
+              <CatIcon className="w-8 h-8 text-amber-400" />
+              <h1 className="text-xl font-bold" style={{ fontFamily: "'Quicksand', sans-serif" }}>
+                <span className="text-sky-500">Der</span><span className="text-rose-400">Die</span><span className="text-emerald-500">Das</span>
+              </h1>
             </div>
-            <div className="mt-3 pt-3 border-t border-gray-300">
-              <p className="text-xs text-gray-600">
-                已识别 {nouns.length} 个名词，{articles.length} 个冠词 | 
-                已标注 {tokens.filter(t => t.isNoun).length} 个名词，{tokens.filter(t => t.isArticle).length} 个冠词
-              </p>
-            </div>
+            <LanguageSwitcher />
           </div>
 
-          {/* Text Display */}
-          <div className="text-lg leading-relaxed mb-8">
-            {tokens.map((token, idx) => {
-              if (token.isNoun && token.nounData) {
-                const noun = token.nounData
-                // Skip plural nouns (pl)
-                if (noun.gender === 'pl') {
-                  return <span key={idx}>{token.text}</span>
-                }
-                return (
-                  <motion.span
-                    key={idx}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`inline-block cursor-pointer font-semibold ${genderColors[noun.gender]}`}
-                    onClick={() => handleNounClick(noun)}
-                    title={`${genderLabels[noun.gender]} ${noun.lemma}`}
-                  >
-                    {token.text}
-                  </motion.span>
-                )
-              }
-              if (token.isArticle && token.articleData) {
-                const article = token.articleData
-                // Skip plural articles (pl)
-                if (article.gender === 'pl') {
-                  return <span key={idx}>{token.text}</span>
-                }
-                return (
-                  <motion.span
-                    key={idx}
-                    whileHover={{ scale: 1.05 }}
-                    className={`inline-block font-semibold ${genderColors[article.gender]}`}
-                    title={`冠词 (${genderLabels[article.gender]})`}
-                  >
-                    {token.text}
-                  </motion.span>
-                )
-              }
-              return <span key={idx}>{token.text}</span>
-            })}
-          </div>
+          <div className="bg-white rounded-3xl shadow-xl p-8 border-2 border-amber-100">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800" style={{ fontFamily: "'Quicksand', sans-serif" }}>{t.reading.title}</h2>
 
-          {/* Declension Popover */}
-          <AnimatePresence>
-            {selectedNoun && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-                onClick={() => {
-                  setSelectedNoun(null)
-                  setDeclensionTable(null)
-                }}
-              >
-                <motion.div
-                  initial={{ scale: 0.9 }}
-                  animate={{ scale: 1 }}
-                  exit={{ scale: 0.9 }}
-                  className="bg-white rounded-lg shadow-2xl max-w-md w-full p-6"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h3 className="text-2xl font-bold">
-                        {selectedNoun.gender !== 'pl' && (
-                          <span className={genderColors[selectedNoun.gender]}>
-                            {genderLabels[selectedNoun.gender]}
-                          </span>
-                        )}
-                        {selectedNoun.gender === 'pl' && <span>die</span>}{' '}
-                        {selectedNoun.lemma}
-                      </h3>
-                      <p className="text-sm text-gray-500 mt-1">
-                        原文: {selectedNoun.original}
-                      </p>
-                      {selectedNoun.translation_zh && (
-                        <p className="text-sm text-gray-600 mt-1">
-                          中文：{selectedNoun.translation_zh}
-                        </p>
-                      )}
-                      {selectedNoun.translation_en && (
-                        <p className="text-sm text-gray-600 mt-1">
-                          英文：{selectedNoun.translation_en}
-                        </p>
-                      )}
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => toggleFavorite(selectedNoun)}
-                        className={`p-2 rounded-lg transition-colors ${
-                          isFavorited(selectedNoun.lemma)
-                            ? 'text-yellow-500 bg-yellow-50'
-                            : 'text-gray-400 hover:text-yellow-500 hover:bg-gray-100'
-                        }`}
-                        title="收藏"
-                      >
-                        <Star
-                          size={20}
-                          fill={isFavorited(selectedNoun.lemma) ? 'currentColor' : 'none'}
-                        />
-                      </button>
-                      <button
-                        onClick={() => {
-                          setSelectedNoun(null)
-                          setDeclensionTable(null)
-                        }}
-                        className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
-                      >
-                        <X size={20} />
-                      </button>
-                    </div>
+            <div className="mb-6 p-4 bg-amber-50 rounded-2xl border-2 border-amber-100">
+              <p className="text-sm font-semibold mb-3 text-gray-700">{t.reading.colorLegend}</p>
+              <div className="flex flex-wrap gap-6 text-sm">
+                {['m', 'f', 'n'].map(g => (
+                  <div key={g} className="flex items-center gap-2">
+                    <span className={`w-4 h-4 rounded-full ${g === 'm' ? 'bg-sky-400' : g === 'f' ? 'bg-rose-400' : 'bg-emerald-400'}`}></span>
+                    <span className={colors[g] + ' font-semibold'}>{labels[g]} ({g === 'm' ? t.gender.masculine : g === 'f' ? t.gender.feminine : t.gender.neuter})</span>
                   </div>
+                ))}
+              </div>
+              <p className="mt-3 pt-3 border-t border-amber-200 text-xs text-gray-500">{t.reading.foundNouns}: {nouns.length} | {t.reading.foundArticles}: {articles.length}</p>
+            </div>
 
-                  {isLoadingDeclension ? (
-                    <div className="py-8 text-center text-gray-500">加载中...</div>
-                  ) : declensionTable && declensionTable.cases ? (
-                    <div className="border-t pt-4">
-                      <h4 className="font-semibold mb-4">变格表 (Deklination)</h4>
-                      <div className="overflow-x-auto">
-                        <table className="w-full">
-                          <thead>
-                            <tr className="border-b-2 border-gray-200">
-                              <th className="text-left py-2 px-3 font-semibold text-gray-700">格</th>
-                              <th className="text-left py-2 px-3 font-semibold text-gray-700">定冠词</th>
-                              <th className="text-left py-2 px-3 font-semibold text-gray-700">名词形式</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {declensionTable.cases.map((caseData, idx) => {
-                              const caseNames: Record<string, string> = {
-                                nominativ: 'Nominativ',
-                                genitiv: 'Genitiv',
-                                dativ: 'Dativ',
-                                akkusativ: 'Akkusativ',
-                              }
-                              return (
-                                <tr
-                                  key={caseData.case}
-                                  className={idx < declensionTable.cases.length - 1 ? 'border-b border-gray-100' : ''}
-                                >
-                                  <td className="py-3 px-3 font-medium text-gray-600">
-                                    {caseNames[caseData.case] || caseData.case}
-                                  </td>
-                                  <td className="py-3 px-3">
-                                    <span
-                                      className={`font-bold text-lg ${selectedNoun.gender !== 'pl' ? genderColors[selectedNoun.gender] : 'text-gray-600'}`}
-                                    >
-                                      {caseData.article}
-                                    </span>
-                                  </td>
-                                  <td className="py-3 px-3 font-semibold text-gray-800">
-                                    {caseData.nounForm}
-                                  </td>
-                                </tr>
-                              )
-                            })}
-                          </tbody>
-                        </table>
-                      </div>
+            <div className="text-lg leading-relaxed mb-8 p-6 bg-gray-50 rounded-2xl border border-gray-100">
+              {parseText().map((token, idx) => {
+                if (token.isNoun && token.nounData && token.nounData.gender !== 'pl') {
+                  return (
+                    <span key={idx} className={`cursor-pointer font-bold ${colors[token.nounData.gender]} underline decoration-2 underline-offset-2 hover:opacity-70`}
+                      onClick={() => handleClick(token.nounData)} title={`${labels[token.nounData.gender]} ${token.nounData.lemma}`}>{token.text}</span>
+                  )
+                }
+                if (token.isArticle && token.articleData && token.articleData.gender !== 'pl') {
+                  return <span key={idx} className={`font-bold ${colors[token.articleData.gender]}`}>{token.text}</span>
+                }
+                return <span key={idx}>{token.text}</span>
+              })}
+            </div>
+
+            <div className="flex items-center gap-2 text-gray-500 text-sm">
+              <PawIcon className="w-4 h-4 text-amber-400" /><span>{t.reading.clickNounHint}</span>
+            </div>
+          </div>
+
+          {selected && (
+            <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4" onClick={close}>
+              <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 border-2 border-amber-100" onClick={e => e.stopPropagation()}>
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-2xl font-bold" style={{ fontFamily: "'Quicksand', sans-serif" }}>
+                        <span className={colors[selected.gender]}>{labels[selected.gender]}</span> {selected.lemma}
+                      </h3>
+                      <button onClick={() => speak(`${labels[selected.gender]} ${selected.lemma}`)} className="p-2 text-gray-400 hover:text-amber-500 rounded-full">
+                        <VolumeIcon className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
+                      </button>
                     </div>
-                  ) : selectedNoun && !isLoadingDeclension ? (
-                    <div className="border-t pt-4 text-center text-gray-500">
-                      无法加载变格表
-                    </div>
-                  ) : null}
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                    <p className="text-sm text-gray-500 mt-1">{t.reading.original}: {selected.original}</p>
+                    {selected.translation_zh && <p className="text-sm text-gray-600 mt-1">{t.reading.chinese}: {selected.translation_zh}</p>}
+                    {selected.translation_en && <p className="text-sm text-gray-600 mt-1">{t.reading.english}: {selected.translation_en}</p>}
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={() => toggleFavorite(selected)} className={`p-2 rounded-full ${isFavorited(selected.lemma) ? 'text-amber-500 bg-amber-50' : 'text-gray-400 hover:text-amber-500 hover:bg-amber-50'}`}>
+                      <StarIcon className="w-5 h-5" filled={isFavorited(selected.lemma)} />
+                    </button>
+                    <button onClick={close} className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full"><XIcon className="w-5 h-5" /></button>
+                  </div>
+                </div>
+
+                {loading ? (
+                  <div className="py-8 text-center text-gray-500">
+                    <div className="w-8 h-8 border-4 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                    {t.reading.loadingDeclension}
+                  </div>
+                ) : declension?.cases ? (
+                  <div className="border-t-2 border-amber-100 pt-4">
+                    <h4 className="font-semibold mb-4 text-gray-700">{t.reading.declensionTitle}</h4>
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b-2 border-amber-100">
+                          <th className="text-left py-2 px-3 font-semibold text-gray-600 text-sm">{t.reading.caseHeader}</th>
+                          <th className="text-left py-2 px-3 font-semibold text-gray-600 text-sm">{t.reading.articleHeader}</th>
+                          <th className="text-left py-2 px-3 font-semibold text-gray-600 text-sm">{t.reading.nounFormHeader}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {declension.cases.map((c: any, i: number) => (
+                          <tr key={c.case} className={i < declension.cases.length - 1 ? 'border-b border-gray-100' : ''}>
+                            <td className="py-3 px-3 font-medium text-gray-600 text-sm">{caseNames[c.case] || c.case}</td>
+                            <td className="py-3 px-3"><span className={`font-bold text-lg ${colors[selected.gender]}`}>{c.article}</span></td>
+                            <td className="py-3 px-3 font-semibold text-gray-800">{c.nounForm}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : <div className="border-t-2 border-amber-100 pt-4 text-center text-gray-500">{t.reading.cannotLoadDeclension}</div>}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
   )
 }
-
