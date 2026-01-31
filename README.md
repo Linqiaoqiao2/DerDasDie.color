@@ -1,8 +1,9 @@
 # DerDieDas.color 🐱
 
-German has three genders. You will forget them. This app helps.
+> *"Why is a fork masculine, a spoon feminine, and a knife neutral?"*  
+> — Every German learner, eventually losing their mind
 
-Paste any German text, and it'll color-code all the nouns by gender:
+Stop guessing. Start seeing. Paste any German text, and watch nouns light up by gender:
 - **der** → blue
 - **die** → red  
 - **das** → green
