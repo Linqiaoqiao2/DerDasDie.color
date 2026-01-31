@@ -1,82 +1,76 @@
-# DerDieDas Color Reader
+# DerDieDas.color 🐱
 
-德语词性色彩映射阅读器 - German Gender Color-Reader
+German has three genders. You will forget them. This app helps.
 
-## 功能特性
+Paste any German text, and it'll color-code all the nouns by gender:
+- **der** → blue
+- **die** → red  
+- **das** → green
 
-- 🎨 **自动词性识别**：使用 DeepSeek API 自动识别德语文本中的名词及其词性
-- 🌈 **色彩映射**：根据词性自动着色（der=蓝色, die=红色, das=绿色, 复数=琥珀色）
-- 📖 **变格表**：点击着色单词查看四个格的变格表（Nominativ/Genitiv/Dativ/Akkusativ）
-- ⭐ **生词本**：收藏单词到本地存储，方便复习
-- ✨ **流畅动画**：使用 Framer Motion 提供平滑的交互体验
+Click a word to see its declension table. Star it to save for later.
 
-## 技术栈
+## Getting Started
 
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **AI**: DeepSeek API (via OpenAI SDK)
-- **Icons**: Lucide React
-- **Animation**: Framer Motion
-
-## 快速开始
-
-### 1. 安装依赖
+You'll need:
+- Node.js 18+
+- Python 3.9+
+- A [DeepSeek API](https://platform.deepseek.com/) key
 
 ```bash
+# Clone and install
+git clone https://github.com/yourusername/DerDieDas.color.git
+cd DerDieDas.color
 npm install
-```
 
-### 2. 配置环境变量
+# Add your API key
+echo "DEEPSEEK_API_KEY=sk-xxx" > .env.local
 
-创建 `.env.local` 文件并添加你的 DeepSeek API Key：
+# Start backend (handles file uploads)
+cd backend && ./start.sh
 
-```env
-DEEPSEEK_API_KEY=your_deepseek_api_key_here
-```
-
-### 3. 运行开发服务器
-
-```bash
+# Start frontend (in another terminal)
 npm run dev
 ```
 
-打开 [http://localhost:3000](http://localhost:3000) 查看应用。
+Open http://localhost:3000 and you're good to go.
 
-## 使用说明
+## Features
 
-1. 在文本框中输入或粘贴德语文本
-2. 点击"分析文本"按钮
-3. 查看着色后的文本，名词会根据词性显示不同颜色
-4. 点击着色单词查看变格表
-5. 点击星标收藏单词到生词本
+**Reading Mode** — Paste text or upload a file (PDF, Word, TXT). The app sends it to DeepSeek to identify nouns and their genders, then renders everything with color-coded articles.
 
-## 项目结构
+**Declension Tables** — Click any colored noun to see all four cases (Nominativ, Genitiv, Dativ, Akkusativ).
+
+**Vocabulary Book** — Star words you want to remember. Review them later with flashcards. Data stays in your browser's localStorage.
+
+**File Upload** — The Python backend extracts text from PDFs (via pdfplumber), Word docs, and plain text files. Max 10MB, no OCR.
+
+**Text-to-Speech** — Click the speaker icon to hear pronunciation. Uses browser's built-in speech synthesis.
+
+**i18n** — UI available in English, German, and Chinese.
+
+## Project Layout
 
 ```
-.
-├── app/
-│   ├── api/
-│   │   └── analyze/
-│   │       └── route.ts      # DeepSeek API 路由
-│   ├── components/
-│   │   └── ReadingMode.tsx   # 阅读模式组件
-│   ├── globals.css           # 全局样式
-│   ├── layout.tsx            # 根布局
-│   ├── page.tsx              # 主页面
-│   └── types.ts              # TypeScript 类型定义
-├── package.json
-├── tailwind.config.ts        # Tailwind 配置
-└── tsconfig.json
+app/
+  api/analyze/       → DeepSeek integration
+  api/declension/    → Declension logic  
+  components/        → React components
+  hooks/             → useFavorites, useTTS
+  i18n/              → Translations
+
+backend/
+  main.py            → FastAPI file upload service
+  start.sh           → One-click setup script
 ```
 
-## 注意事项
+## Tech
 
-- 需要有效的 DeepSeek API Key
-- 变格表功能目前使用简化规则，实际德语变格更复杂
-- 生词本数据存储在浏览器 localStorage 中
+- Next.js 14 + TypeScript + Tailwind
+- FastAPI + pdfplumber + python-docx
+- DeepSeek API for noun analysis
+- Framer Motion for animations
 
-## License
+## Notes
 
-MIT
+- Vocabulary is stored locally, no sync between devices yet
 
