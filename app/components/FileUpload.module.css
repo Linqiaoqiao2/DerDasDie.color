@@ -1,0 +1,60 @@
+.container { width: 100%; }
+
+/* Drop Zone */
+.dropZone {
+  position: relative; border: 2px dashed #e5e7eb; border-radius: 1rem;
+  padding: 2rem; transition: all 0.2s; cursor: pointer;
+}
+.dropZone:hover { border-color: #fcd34d; background: #fffbeb; }
+.dropZoneDragging { border-color: #fbbf24; background: #fffbeb; transform: scale(1.02); }
+.dropZoneWithFile { border-color: #34d399; background: #ecfdf5; cursor: default; }
+.dropZoneDisabled { opacity: 0.5; cursor: not-allowed; }
+.hiddenInput { display: none; }
+
+/* Drop Content */
+.dropContent { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; text-align: center; }
+.iconCircle { width: 3.5rem; height: 3.5rem; border-radius: 9999px; display: flex; align-items: center; justify-content: center; background: #fef3c7; }
+.iconCircleDragging { background: #fde68a; }
+.uploadIcon { width: 1.75rem; height: 1.75rem; color: #f59e0b; }
+.uploadIconDragging { color: #d97706; }
+.dropText { font-size: 0.875rem; font-weight: 600; color: #374151; }
+.supportedFormats { font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem; }
+.maxSize { font-size: 0.75rem; color: #9ca3af; margin-top: 0.25rem; }
+
+/* File Preview */
+.filePreview { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+.fileInfo { display: flex; align-items: center; gap: 0.75rem; flex: 1; min-width: 0; }
+.fileIconPdf { width: 1.5rem; height: 1.5rem; color: #f43f5e; }
+.fileIconDocx { width: 1.5rem; height: 1.5rem; color: #0ea5e9; }
+.fileIconTxt { width: 1.5rem; height: 1.5rem; color: #6b7280; }
+.fileDetails { flex: 1; min-width: 0; }
+.fileName { font-size: 0.875rem; font-weight: 600; color: #1f2937; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fileSize { font-size: 0.75rem; color: #6b7280; }
+.clearButton { padding: 0.5rem; border-radius: 9999px; background: none; border: none; cursor: pointer; transition: background 0.2s; }
+.clearButton:hover { background: #e5e7eb; }
+.clearIcon { width: 1.25rem; height: 1.25rem; color: #6b7280; }
+
+/* Messages */
+.errorMessage, .progressMessage {
+  margin-top: 0.75rem; padding: 0.75rem; border-radius: 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.errorMessage { background: #fff1f2; border: 2px solid #fecdd3; }
+.progressMessage { background: #fffbeb; border: 2px solid #fde68a; }
+.errorIcon { width: 1.25rem; height: 1.25rem; color: #f43f5e; flex-shrink: 0; }
+.progressIcon { width: 1.25rem; height: 1.25rem; color: #f59e0b; }
+.successIcon { width: 1.25rem; height: 1.25rem; color: #10b981; }
+.errorText { font-size: 0.875rem; color: #be123c; font-weight: 500; }
+.progressText { font-size: 0.875rem; color: #b45309; font-weight: 500; }
+
+/* Extract Button */
+.extractButton {
+  width: 100%; margin-top: 1rem; padding: 0.75rem 1rem; border-radius: 1rem;
+  font-weight: 700; color: white; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  border: none; cursor: pointer; transition: all 0.2s;
+  background: linear-gradient(to right, #fbbf24, #f59e0b); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+}
+.extractButton:hover:not(:disabled) { background: linear-gradient(to right, #f59e0b, #d97706); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); transform: translateY(-2px); }
+.extractButtonDisabled { background: #9ca3af; cursor: not-allowed; box-shadow: none; }
+.extractButtonDisabled:hover { transform: none; }
+.buttonIcon { width: 1.25rem; height: 1.25rem; }

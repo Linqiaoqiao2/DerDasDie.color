@@ -1,0 +1,153 @@
+.pageContainer { min-height: 100vh; background: #fffbeb; }
+
+/* Background */
+.backgroundDecorations { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.pawPrint { position: absolute; }
+.pawPrint1 { top: 5rem; left: 2.5rem; width: 2rem; height: 2rem; color: #fde68a; transform: rotate(-20deg); }
+.pawPrint2 { top: 10rem; right: 5rem; width: 1.5rem; height: 1.5rem; color: #fecdd3; transform: rotate(15deg); }
+.pawPrint3 { bottom: 8rem; left: 5rem; width: 2.5rem; height: 2.5rem; color: #bae6fd; transform: rotate(-10deg); }
+
+/* Layout */
+.mainContent { position: relative; z-index: 10; padding: 1.5rem; }
+.contentWrapper { max-width: 42rem; margin: 0 auto; }
+
+/* Header */
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+.backButton {
+  display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;
+  background: white; border-radius: 9999px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  font-weight: 600; color: #374151; border: none; cursor: pointer; transition: background 0.2s;
+}
+.backButton:hover { background: #fffbeb; }
+.headerTitle { display: flex; align-items: center; gap: 0.75rem; }
+.catIcon { width: 2rem; height: 2rem; color: #fbbf24; }
+.pageTitle { font-size: 1.25rem; font-weight: 700; font-family: 'Quicksand', sans-serif; }
+
+/* Card */
+.cardContainer { background: white; border-radius: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); padding: 1.5rem; border: 2px solid #fef3c7; }
+
+/* Empty State */
+.emptyState { text-align: center; padding: 3rem 0; }
+.emptyIcon, .emptyIconLight { margin: 0 auto 1rem; width: 4rem; height: 4rem; }
+.emptyIcon { color: #fcd34d; }
+.emptyIconLight { color: #fde68a; }
+.emptyTitle { font-size: 1.25rem; font-weight: 600; color: #374151; }
+.emptySubtitle { font-weight: 600; color: #4b5563; }
+.emptyHint { font-size: 0.875rem; margin-top: 0.5rem; color: #6b7280; }
+.returnButton {
+  margin-top: 1rem; padding: 0.5rem 1.5rem; background: #fef3c7; border-radius: 9999px;
+  font-weight: 600; color: #b45309; border: none; cursor: pointer; transition: background 0.2s;
+}
+.returnButton:hover { background: #fde68a; }
+
+/* List Header */
+.listHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+.wordCount { display: flex; align-items: center; gap: 0.5rem; }
+.bookIcon { width: 1.5rem; height: 1.5rem; color: #f59e0b; }
+.wordCountText { font-size: 1.125rem; font-weight: 700; color: #374151; }
+.listActions { display: flex; gap: 0.5rem; }
+
+/* Buttons */
+.exportButton {
+  display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;
+  background: white; border-radius: 9999px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  border: none; cursor: pointer; transition: background 0.2s;
+}
+.exportButton:hover { background: #f9fafb; }
+.exportButton:disabled { opacity: 0.5; cursor: not-allowed; }
+.flashcardButton {
+  display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;
+  background: #fbbf24; color: white; border-radius: 9999px; font-weight: 700;
+  border: none; cursor: pointer; transition: background 0.2s;
+}
+.flashcardButton:hover { background: #f59e0b; }
+.flashcardButton:disabled { opacity: 0.5; cursor: not-allowed; }
+.hideOnMobile { display: none; }
+@media (min-width: 640px) { .hideOnMobile { display: inline; } }
+
+/* Word List */
+.wordList { display: flex; flex-direction: column; gap: 0.75rem; }
+.wordItem {
+  display: flex; align-items: center; justify-content: space-between; padding: 1rem;
+  background: white; border-radius: 1rem; border: 2px solid #f3f4f6; transition: border-color 0.2s;
+}
+.wordItem:hover { border-color: #fde68a; }
+.wordContent { display: flex; align-items: center; gap: 0.75rem; }
+.genderBar { width: 0.5rem; height: 2.5rem; border-radius: 9999px; }
+.genderBarM { background: #38bdf8; }
+.genderBarF { background: #fb7185; }
+.genderBarN { background: #34d399; }
+.genderBarPl { background: #a855f7; }
+.wordInfo { display: flex; flex-direction: column; }
+.wordHeader { display: flex; align-items: center; gap: 0.5rem; }
+.genderLabel { font-weight: 700; }
+.genderM { color: #0ea5e9; }
+.genderF { color: #fb7185; }
+.genderN { color: #10b981; }
+.genderPl { color: #a855f7; }
+.wordLemma { font-weight: 600; color: #1f2937; }
+.translation { font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem; }
+
+/* Speak Buttons */
+.speakButton { padding: 0.25rem; color: #9ca3af; border-radius: 9999px; background: none; border: none; cursor: pointer; transition: color 0.2s; }
+.speakButton:hover { color: #f59e0b; }
+.speakButtonLarge { padding: 0.5rem; background: rgba(255,255,255,0.2); border-radius: 9999px; border: none; cursor: pointer; transition: background 0.2s; }
+.speakButtonLarge:hover { background: rgba(255,255,255,0.3); }
+.speakButtonFlipped { padding: 0.5rem; color: #9ca3af; border-radius: 9999px; background: none; border: none; cursor: pointer; transition: color 0.2s; }
+.speakButtonFlipped:hover { color: #f59e0b; }
+.deleteButton { padding: 0.5rem; color: #9ca3af; border-radius: 9999px; background: none; border: none; cursor: pointer; transition: all 0.2s; }
+.deleteButton:hover { color: #f43f5e; background: #fff1f2; }
+
+/* Icons */
+.iconSmall { width: 1.25rem; height: 1.25rem; }
+.iconTiny { width: 1rem; height: 1rem; }
+.iconMedium { width: 1.5rem; height: 1.5rem; }
+.iconPulsing { animation: pulse 1s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+/* Progress */
+.progressSection { margin-bottom: 1.5rem; }
+.progressHeader { display: flex; justify-content: space-between; font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem; }
+.progressBar { height: 0.75rem; background: #fef3c7; border-radius: 9999px; overflow: hidden; }
+.progressFill { height: 100%; background: #fbbf24; border-radius: 9999px; transition: width 0.3s; }
+
+/* Flashcard */
+.flashcardWrapper { max-width: 28rem; margin: 0 auto; }
+.flashcard { height: 18rem; cursor: pointer; }
+.flashcardFront {
+  height: 100%; border-radius: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem;
+  background: linear-gradient(to bottom right, var(--gradient-from), var(--gradient-to));
+}
+.gradientM { --gradient-from: #38bdf8; --gradient-to: #0284c7; }
+.gradientF { --gradient-from: #fb7185; --gradient-to: #e11d48; }
+.gradientN { --gradient-from: #34d399; --gradient-to: #059669; }
+.gradientPl { --gradient-from: #a855f7; --gradient-to: #7c3aed; }
+.flipHint { color: rgba(255,255,255,0.7); font-size: 0.875rem; margin-bottom: 0.5rem; }
+.frontContent { display: flex; align-items: center; gap: 0.75rem; }
+.frontWord { font-size: 2.25rem; font-weight: 700; color: white; }
+.frontSpeakIcon { width: 1.5rem; height: 1.5rem; color: white; }
+.flashcardBack {
+  height: 100%; background: white; border-radius: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; border: 4px solid #fef3c7;
+}
+.backArticle { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
+.backArticleText { font-size: 3rem; font-weight: 700; }
+.backSpeakIcon { width: 1.5rem; height: 1.5rem; }
+.backWord { font-size: 1.5rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem; }
+.backTranslation { color: #6b7280; text-align: center; }
+.backTranslationZh, .backTranslationEn { margin: 0; }
+.backTranslationEn { font-size: 0.875rem; }
+
+/* Flashcard Actions */
+.flashcardActions { display: flex; gap: 1rem; margin-top: 1.5rem; }
+.forgotButton, .rememberedButton {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  padding: 1rem; border-radius: 1rem; font-weight: 700; border: none; cursor: pointer; transition: background 0.2s;
+}
+.forgotButton { background: #ffe4e6; color: #e11d48; }
+.forgotButton:hover { background: #fecdd3; }
+.rememberedButton { background: #d1fae5; color: #059669; }
+.rememberedButton:hover { background: #a7f3d0; }
+.flashcardHint { text-align: center; margin-top: 1.5rem; color: #6b7280; font-size: 0.875rem; }
+.hintPaw { display: inline; width: 1rem; height: 1rem; color: #fbbf24; margin-right: 0.25rem; vertical-align: middle; }

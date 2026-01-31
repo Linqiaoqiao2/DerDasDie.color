@@ -1,9 +1,7 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 import { LanguageProvider } from './i18n'
-
-const inter = Inter({ subsets: ['latin'] })
+import styles from './layout.module.css'
 
 export const metadata: Metadata = {
   title: 'DerDieDas Color Reader',
@@ -17,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="de">
-      <body className={inter.className}>
+      <body className={styles.body}>
         <LanguageProvider>
           {children}
         </LanguageProvider>

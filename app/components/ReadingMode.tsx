@@ -4,11 +4,12 @@ import { useState } from 'react'
 import { useTTS } from '../hooks/useTTS'
 import { useFavorites } from '../hooks/useFavorites'
 import { useLanguage } from '../i18n'
+import { GENDER_LABELS } from '../lib/constants'
 import LanguageSwitcher from './LanguageSwitcher'
 import { CatIcon, PawIcon, StarIcon, VolumeIcon, XIcon, ArrowLeftIcon } from './Icons'
+import styles from './ReadingMode.module.css'
 
-const colors: Record<string, string> = { m: 'text-sky-500', f: 'text-rose-400', n: 'text-emerald-500', pl: 'text-purple-500' }
-const labels: Record<string, string> = { m: 'der', f: 'die', n: 'das', pl: 'die' }
+const genderStyles: Record<string, string> = { m: styles.genderM, f: styles.genderF, n: styles.genderN, pl: styles.genderPl }
 
 export default function ReadingMode({ originalText, nouns, articles, onBack }: { originalText: string; nouns: any[]; articles: any[]; onBack: () => void }) {
   const { t } = useLanguage()
@@ -63,120 +64,165 @@ export default function ReadingMode({ originalText, nouns, articles, onBack }: {
     return tokens
   }
 
-  const caseNames: Record<string, string> = { nominativ: t.cases.nominativ, genitiv: t.cases.genitiv, dativ: t.cases.dativ, akkusativ: t.cases.akkusativ }
+  const caseNames: Record<string, string> = {
+    nominativ: t.cases.nominativ,
+    genitiv: t.cases.genitiv,
+    dativ: t.cases.dativ,
+    akkusativ: t.cases.akkusativ
+  }
 
   return (
-    <div className="min-h-screen bg-amber-50" style={{ fontFamily: "'Nunito', sans-serif" }}>
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <PawIcon className="absolute top-20 left-10 w-8 h-8 text-amber-200 rotate-[-20deg]" />
-        <PawIcon className="absolute top-40 right-20 w-6 h-6 text-rose-200 rotate-[15deg]" />
-        <PawIcon className="absolute bottom-32 left-20 w-10 h-10 text-sky-200 rotate-[-10deg]" />
+    <div className={styles.pageContainer}>
+      <div className={styles.backgroundDecorations}>
+        <PawIcon className={`${styles.pawPrint} ${styles.pawPrint1}`} />
+        <PawIcon className={`${styles.pawPrint} ${styles.pawPrint2}`} />
+        <PawIcon className={`${styles.pawPrint} ${styles.pawPrint3}`} />
       </div>
 
-      <div className="relative z-10 p-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-between mb-6">
-            <button onClick={onBack} className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-amber-50 rounded-full shadow-md font-semibold text-gray-700">
-              <ArrowLeftIcon className="w-5 h-5" /> {t.reading.backToEdit}
+      <div className={styles.mainContent}>
+        <div className={styles.contentWrapper}>
+          <div className={styles.header}>
+            <button onClick={onBack} className={styles.backButton}>
+              <ArrowLeftIcon className={styles.iconSmall} /> {t.reading.backToEdit}
             </button>
-            <div className="flex items-center gap-3">
-              <CatIcon className="w-8 h-8 text-amber-400" />
-              <h1 className="text-xl font-bold" style={{ fontFamily: "'Quicksand', sans-serif" }}>
-                <span className="text-sky-500">Der</span><span className="text-rose-400">Die</span><span className="text-emerald-500">Das</span>
+            <div className={styles.headerTitle}>
+              <CatIcon className={styles.catIcon} />
+              <h1 className={styles.appTitle}>
+                <span className={styles.titleDer}>Der</span>
+                <span className={styles.titleDie}>Die</span>
+                <span className={styles.titleDas}>Das</span>
               </h1>
             </div>
             <LanguageSwitcher />
           </div>
 
-          <div className="bg-white rounded-3xl shadow-xl p-8 border-2 border-amber-100">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800" style={{ fontFamily: "'Quicksand', sans-serif" }}>{t.reading.title}</h2>
+          <div className={styles.mainCard}>
+            <h2 className={styles.mainTitle}>{t.reading.title}</h2>
 
-            <div className="mb-6 p-4 bg-amber-50 rounded-2xl border-2 border-amber-100">
-              <p className="text-sm font-semibold mb-3 text-gray-700">{t.reading.colorLegend}</p>
-              <div className="flex flex-wrap gap-6 text-sm">
+            <div className={styles.legendBox}>
+              <p className={styles.legendTitle}>{t.reading.colorLegend}</p>
+              <div className={styles.legendItems}>
                 {['m', 'f', 'n'].map(g => (
-                  <div key={g} className="flex items-center gap-2">
-                    <span className={`w-4 h-4 rounded-full ${g === 'm' ? 'bg-sky-400' : g === 'f' ? 'bg-rose-400' : 'bg-emerald-400'}`}></span>
-                    <span className={colors[g] + ' font-semibold'}>{labels[g]} ({g === 'm' ? t.gender.masculine : g === 'f' ? t.gender.feminine : t.gender.neuter})</span>
+                  <div key={g} className={styles.legendItem}>
+                    <span className={`${styles.legendDot} ${g === 'm' ? styles.dotSky : g === 'f' ? styles.dotRose : styles.dotEmerald}`} />
+                    <span className={`${styles.legendLabel} ${genderStyles[g]}`}>
+                      {GENDER_LABELS[g]} ({g === 'm' ? t.gender.masculine : g === 'f' ? t.gender.feminine : t.gender.neuter})
+                    </span>
                   </div>
                 ))}
               </div>
-              <p className="mt-3 pt-3 border-t border-amber-200 text-xs text-gray-500">{t.reading.foundNouns}: {nouns.length} | {t.reading.foundArticles}: {articles.length}</p>
+              <p className={styles.legendStats}>
+                {t.reading.foundNouns}: {nouns.length} | {t.reading.foundArticles}: {articles.length}
+              </p>
             </div>
 
-            <div className="text-lg leading-relaxed mb-8 p-6 bg-gray-50 rounded-2xl border border-gray-100">
+            <div className={styles.readingArea}>
               {parseText().map((token, idx) => {
                 if (token.isNoun && token.nounData && token.nounData.gender !== 'pl') {
                   return (
-                    <span key={idx} className={`cursor-pointer font-bold ${colors[token.nounData.gender]} underline decoration-2 underline-offset-2 hover:opacity-70`}
-                      onClick={() => handleClick(token.nounData)} title={`${labels[token.nounData.gender]} ${token.nounData.lemma}`}>{token.text}</span>
+                    <span
+                      key={idx}
+                      className={`${styles.nounHighlight} ${genderStyles[token.nounData.gender]}`}
+                      onClick={() => handleClick(token.nounData)}
+                      title={`${GENDER_LABELS[token.nounData.gender]} ${token.nounData.lemma}`}
+                    >
+                      {token.text}
+                    </span>
                   )
                 }
                 if (token.isArticle && token.articleData && token.articleData.gender !== 'pl') {
-                  return <span key={idx} className={`font-bold ${colors[token.articleData.gender]}`}>{token.text}</span>
+                  return (
+                    <span key={idx} className={`${styles.articleHighlight} ${genderStyles[token.articleData.gender]}`}>
+                      {token.text}
+                    </span>
+                  )
                 }
                 return <span key={idx}>{token.text}</span>
               })}
             </div>
 
-            <div className="flex items-center gap-2 text-gray-500 text-sm">
-              <PawIcon className="w-4 h-4 text-amber-400" /><span>{t.reading.clickNounHint}</span>
+            <div className={styles.hint}>
+              <PawIcon className={styles.hintPaw} />
+              <span>{t.reading.clickNounHint}</span>
             </div>
           </div>
 
           {selected && (
-            <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4" onClick={close}>
-              <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 border-2 border-amber-100" onClick={e => e.stopPropagation()}>
-                <div className="flex items-start justify-between mb-4">
+            <div className={styles.modalOverlay} onClick={close}>
+              <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+                <div className={styles.modalHeader}>
                   <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-2xl font-bold" style={{ fontFamily: "'Quicksand', sans-serif" }}>
-                        <span className={colors[selected.gender]}>{labels[selected.gender]}</span> {selected.lemma}
+                    <div className={styles.modalTitleRow}>
+                      <h3 className={styles.modalTitle}>
+                        <span className={genderStyles[selected.gender]}>{GENDER_LABELS[selected.gender]}</span> {selected.lemma}
                       </h3>
-                      <button onClick={() => speak(`${labels[selected.gender]} ${selected.lemma}`)} className="p-2 text-gray-400 hover:text-amber-500 rounded-full">
-                        <VolumeIcon className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
+                      <button
+                        onClick={() => speak(`${GENDER_LABELS[selected.gender]} ${selected.lemma}`)}
+                        className={styles.speakButton}
+                      >
+                        <VolumeIcon className={`${styles.iconSmall} ${isSpeaking ? styles.iconPulsing : ''}`} />
                       </button>
                     </div>
-                    <p className="text-sm text-gray-500 mt-1">{t.reading.original}: {selected.original}</p>
-                    {selected.translation_zh && <p className="text-sm text-gray-600 mt-1">{t.reading.chinese}: {selected.translation_zh}</p>}
-                    {selected.translation_en && <p className="text-sm text-gray-600 mt-1">{t.reading.english}: {selected.translation_en}</p>}
+                    <p className={styles.modalInfo}>{t.reading.original}: {selected.original}</p>
+                    {selected.translation_zh && (
+                      <p className={styles.modalTranslation}>{t.reading.chinese}: {selected.translation_zh}</p>
+                    )}
+                    {selected.translation_en && (
+                      <p className={styles.modalTranslation}>{t.reading.english}: {selected.translation_en}</p>
+                    )}
                   </div>
-                  <div className="flex gap-2">
-                    <button onClick={() => toggleFavorite(selected)} className={`p-2 rounded-full ${isFavorited(selected.lemma) ? 'text-amber-500 bg-amber-50' : 'text-gray-400 hover:text-amber-500 hover:bg-amber-50'}`}>
-                      <StarIcon className="w-5 h-5" filled={isFavorited(selected.lemma)} />
+                  <div className={styles.modalActions}>
+                    <button
+                      onClick={() => toggleFavorite(selected)}
+                      className={`${styles.favoriteButton} ${isFavorited(selected.lemma) ? styles.favoriteButtonActive : ''}`}
+                    >
+                      <StarIcon className={styles.iconSmall} filled={isFavorited(selected.lemma)} />
                     </button>
-                    <button onClick={close} className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full"><XIcon className="w-5 h-5" /></button>
+                    <button onClick={close} className={styles.closeButton}>
+                      <XIcon className={styles.iconSmall} />
+                    </button>
                   </div>
                 </div>
 
                 {loading ? (
-                  <div className="py-8 text-center text-gray-500">
-                    <div className="w-8 h-8 border-4 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                  <div className={styles.loadingState}>
+                    <div className={styles.spinner} />
                     {t.reading.loadingDeclension}
                   </div>
                 ) : declension?.cases ? (
-                  <div className="border-t-2 border-amber-100 pt-4">
-                    <h4 className="font-semibold mb-4 text-gray-700">{t.reading.declensionTitle}</h4>
-                    <table className="w-full">
+                  <div className={styles.declensionSection}>
+                    <h4 className={styles.declensionTitle}>{t.reading.declensionTitle}</h4>
+                    <table className={styles.declensionTable}>
                       <thead>
-                        <tr className="border-b-2 border-amber-100">
-                          <th className="text-left py-2 px-3 font-semibold text-gray-600 text-sm">{t.reading.caseHeader}</th>
-                          <th className="text-left py-2 px-3 font-semibold text-gray-600 text-sm">{t.reading.articleHeader}</th>
-                          <th className="text-left py-2 px-3 font-semibold text-gray-600 text-sm">{t.reading.nounFormHeader}</th>
+                        <tr className={styles.tableHeader}>
+                          <th className={styles.tableHeaderCell}>{t.reading.caseHeader}</th>
+                          <th className={styles.tableHeaderCell}>{t.reading.articleHeader}</th>
+                          <th className={styles.tableHeaderCell}>{t.reading.nounFormHeader}</th>
                         </tr>
                       </thead>
                       <tbody>
                         {declension.cases.map((c: any, i: number) => (
-                          <tr key={c.case} className={i < declension.cases.length - 1 ? 'border-b border-gray-100' : ''}>
-                            <td className="py-3 px-3 font-medium text-gray-600 text-sm">{caseNames[c.case] || c.case}</td>
-                            <td className="py-3 px-3"><span className={`font-bold text-lg ${colors[selected.gender]}`}>{c.article}</span></td>
-                            <td className="py-3 px-3 font-semibold text-gray-800">{c.nounForm}</td>
+                          <tr
+                            key={c.case}
+                            className={i < declension.cases.length - 1 ? styles.tableRow : styles.tableRowLast}
+                          >
+                            <td className={`${styles.tableCell} ${styles.caseName}`}>
+                              {caseNames[c.case] || c.case}
+                            </td>
+                            <td className={`${styles.tableCell} ${styles.articleCell} ${genderStyles[selected.gender]}`}>
+                              {c.article}
+                            </td>
+                            <td className={`${styles.tableCell} ${styles.nounFormCell}`}>
+                              {c.nounForm}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
-                ) : <div className="border-t-2 border-amber-100 pt-4 text-center text-gray-500">{t.reading.cannotLoadDeclension}</div>}
+                ) : (
+                  <div className={styles.errorState}>{t.reading.cannotLoadDeclension}</div>
+                )}
               </div>
             </div>
           )}

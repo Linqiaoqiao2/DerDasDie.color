@@ -1,0 +1,122 @@
+.pageContainer {
+  min-height: 100vh;
+  background-color: #fffbeb;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background Paw Prints */
+.pawPrintsBackground {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.pawPrint { position: absolute; }
+.pawPrint1 { top: 5rem; left: 2.5rem; width: 2rem; height: 2rem; color: #fde68a; transform: rotate(-20deg); }
+.pawPrint2 { top: 10rem; right: 5rem; width: 1.5rem; height: 1.5rem; color: #fecdd3; transform: rotate(15deg); }
+.pawPrint3 { bottom: 8rem; left: 5rem; width: 2.5rem; height: 2.5rem; color: #bae6fd; transform: rotate(-10deg); }
+.pawPrint4 { top: 15rem; left: 25%; width: 1.25rem; height: 1.25rem; color: #a7f3d0; transform: rotate(30deg); }
+.pawPrint5 { bottom: 12rem; right: 33%; width: 1.75rem; height: 1.75rem; color: #fde68a; transform: rotate(-25deg); }
+.pawPrint6 { top: 8rem; right: 33%; width: 1.5rem; height: 1.5rem; color: #fecdd3; transform: rotate(5deg); }
+
+/* Header */
+.header { position: relative; z-index: 10; padding: 1.5rem 2rem 0; }
+.headerContent { max-width: 64rem; margin: 0 auto; display: flex; justify-content: flex-end; gap: 0.5rem; }
+
+/* Main */
+.main { position: relative; z-index: 10; padding: 0 2rem 3rem; }
+.mainContent { max-width: 56rem; margin: 0 auto; }
+
+/* Hero */
+.heroSection { text-align: center; padding: 2rem 0 1.5rem; }
+.heroTitle { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+.catIconLarge { width: 3.5rem; height: 3.5rem; color: #fbbf24; }
+.appTitle { font-size: 2.25rem; font-weight: 800; letter-spacing: -0.025em; font-family: 'Quicksand', sans-serif; }
+.titleDer { color: #0ea5e9; }
+.titleDie { color: #fb7185; }
+.titleDas { color: #10b981; }
+.subtitle { font-size: 1.25rem; font-weight: 700; color: #374151; font-family: 'Quicksand', sans-serif; }
+.description { color: #6b7280; font-size: 0.875rem; margin: 0.75rem auto 0; max-width: 28rem; }
+
+/* Vocabulary Button */
+.vocabularyButtonContainer { display: flex; justify-content: center; margin-bottom: 2rem; }
+.vocabularyButton {
+  display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem 1.25rem;
+  background: #fbbf24; color: white; border-radius: 9999px; font-weight: 600;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border: none; cursor: pointer; transition: all 0.2s;
+}
+.vocabularyButton:hover { background: #f59e0b; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); transform: translateY(-2px); }
+
+/* Input Card */
+.inputCard { background: white; border-radius: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); padding: 1.5rem; border: 2px solid #fef3c7; }
+
+/* Tabs */
+.tabSwitcher { display: flex; align-items: center; gap: 0.25rem; margin-bottom: 1.5rem; }
+.tabButton {
+  display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;
+  font-weight: 600; font-size: 0.875rem; background: none; border: none; cursor: pointer; color: #9ca3af; transition: color 0.2s;
+}
+.tabButton:hover { color: #4b5563; }
+.tabButtonActive { color: #1f2937; border-bottom: 2px solid #fbbf24; }
+.tabDivider { color: #d1d5db; margin: 0 0.25rem; }
+
+/* Input */
+.inputArea { margin-bottom: 1.5rem; }
+.textarea {
+  width: 100%; height: 9rem; padding: 0.75rem 1rem; border: 2px solid #e5e7eb;
+  border-radius: 1rem; resize: none; color: #374151; font-family: inherit; font-size: 1rem; transition: all 0.2s;
+}
+.textarea:focus { outline: none; border-color: #fbbf24; box-shadow: 0 0 0 4px #fef3c7; }
+.textarea:disabled { opacity: 0.5; }
+.inputHint { color: #9ca3af; font-size: 0.875rem; margin-top: 0.5rem; display: flex; align-items: center; gap: 0.25rem; }
+
+/* Error */
+.errorMessage {
+  margin-bottom: 1rem; padding: 1rem; background: #fff1f2; border: 2px solid #fecdd3;
+  border-radius: 1rem; color: #be123c; display: flex; align-items: center; gap: 0.5rem;
+}
+.errorIcon { color: #f43f5e; }
+
+/* Analyze Button */
+.analyzeButton {
+  width: 100%; padding: 1rem; background: #fbbf24; color: white; border-radius: 1rem;
+  font-weight: 700; font-size: 1.125rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+  display: flex; align-items: center; justify-content: center; gap: 0.5rem; border: none; cursor: pointer; transition: all 0.2s;
+}
+.analyzeButton:hover:not(:disabled) { background: #f59e0b; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); transform: translateY(-2px); }
+.analyzeButton:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Features Card */
+.featuresCard { margin-top: 2rem; background: white; border-radius: 1.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); padding: 1.5rem; border: 2px solid #fef3c7; }
+.featuresTitle { font-weight: 700; color: #374151; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+.starIcon { width: 1.25rem; height: 1.25rem; color: #fbbf24; }
+.featureList { display: flex; flex-direction: column; gap: 0.75rem; }
+.featureItem { display: flex; align-items: flex-start; gap: 0.75rem; }
+.featureBullet { width: 0.5rem; height: 0.5rem; border-radius: 9999px; margin-top: 0.5rem; flex-shrink: 0; }
+.bulletSky { background: #38bdf8; }
+.bulletRose { background: #fb7185; }
+.bulletEmerald { background: #34d399; }
+.bulletAmber { background: #fbbf24; }
+.bulletPurple { background: #a855f7; }
+.featureText { color: #4b5563; font-size: 0.875rem; }
+
+/* Color Guide */
+.colorGuide { margin-top: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 1.5rem; }
+.colorGuideItem { display: flex; align-items: center; gap: 0.5rem; }
+.colorDot { width: 1rem; height: 1rem; border-radius: 9999px; }
+.dotSky { background: #38bdf8; }
+.dotRose { background: #fb7185; }
+.dotEmerald { background: #34d399; }
+.colorLabel { font-size: 0.875rem; font-weight: 500; color: #4b5563; }
+
+/* Footer */
+.footer { display: flex; justify-content: center; margin-top: 2rem; }
+.footerContent { display: flex; align-items: flex-end; gap: 0.5rem; }
+.footerCat { width: 2.5rem; height: 2.5rem; color: #fcd34d; }
+.footerText { color: #9ca3af; font-size: 0.875rem; padding-bottom: 0.5rem; }
+
+/* Icons */
+.iconSmall { width: 1.25rem; height: 1.25rem; }
+.iconTiny { width: 1rem; height: 1rem; }
+.iconMedium { width: 1.5rem; height: 1.5rem; }

@@ -1,6 +1,7 @@
 'use client'
 
 import { useLanguage } from '../i18n'
+import styles from './LanguageSwitcher.module.css'
 
 const langs = [
   { code: 'en', label: '🇬🇧 EN' },
@@ -12,16 +13,12 @@ export default function LanguageSwitcher() {
   const { language, setLanguage } = useLanguage()
 
   return (
-    <div className="flex gap-1">
+    <div className={styles.container}>
       {langs.map(({ code, label }) => (
         <button
           key={code}
           onClick={() => setLanguage(code)}
-          className={`px-3 py-1.5 rounded-full text-sm font-semibold transition-all ${
-            language === code
-              ? 'bg-amber-400 text-white shadow-md'
-              : 'bg-white text-gray-600 hover:bg-amber-50 border border-gray-200'
-          }`}
+          className={`${styles.languageButton} ${language === code ? styles.languageButtonActive : ''}`}
         >
           {label}
         </button>

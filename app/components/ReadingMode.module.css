@@ -1,0 +1,102 @@
+.pageContainer { min-height: 100vh; background: #fffbeb; }
+
+/* Background */
+.backgroundDecorations { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.pawPrint { position: absolute; }
+.pawPrint1 { top: 5rem; left: 2.5rem; width: 2rem; height: 2rem; color: #fde68a; transform: rotate(-20deg); }
+.pawPrint2 { top: 10rem; right: 5rem; width: 1.5rem; height: 1.5rem; color: #fecdd3; transform: rotate(15deg); }
+.pawPrint3 { bottom: 8rem; left: 5rem; width: 2.5rem; height: 2.5rem; color: #bae6fd; transform: rotate(-10deg); }
+
+/* Layout */
+.mainContent { position: relative; z-index: 10; padding: 1.5rem; }
+.contentWrapper { max-width: 56rem; margin: 0 auto; }
+
+/* Header */
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+.backButton {
+  display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;
+  background: white; border-radius: 9999px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  font-weight: 600; color: #374151; border: none; cursor: pointer; transition: background 0.2s;
+}
+.backButton:hover { background: #fffbeb; }
+.headerTitle { display: flex; align-items: center; gap: 0.75rem; }
+.catIcon { width: 2rem; height: 2rem; color: #fbbf24; }
+.appTitle { font-size: 1.25rem; font-weight: 700; font-family: 'Quicksand', sans-serif; }
+.titleDer { color: #0ea5e9; }
+.titleDie { color: #fb7185; }
+.titleDas { color: #10b981; }
+
+/* Main Card */
+.mainCard { background: white; border-radius: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); padding: 2rem; border: 2px solid #fef3c7; }
+.mainTitle { font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #1f2937; font-family: 'Quicksand', sans-serif; }
+
+/* Legend */
+.legendBox { margin-bottom: 1.5rem; padding: 1rem; background: #fffbeb; border-radius: 1rem; border: 2px solid #fef3c7; }
+.legendTitle { font-size: 0.875rem; font-weight: 600; margin-bottom: 0.75rem; color: #374151; }
+.legendItems { display: flex; flex-wrap: wrap; gap: 1.5rem; font-size: 0.875rem; }
+.legendItem { display: flex; align-items: center; gap: 0.5rem; }
+.legendDot { width: 1rem; height: 1rem; border-radius: 9999px; }
+.dotSky { background: #38bdf8; }
+.dotRose { background: #fb7185; }
+.dotEmerald { background: #34d399; }
+.legendLabel { font-weight: 600; }
+.legendStats { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #fde68a; font-size: 0.75rem; color: #6b7280; }
+
+/* Gender Colors */
+.genderM { color: #0ea5e9; }
+.genderF { color: #fb7185; }
+.genderN { color: #10b981; }
+.genderPl { color: #a855f7; }
+
+/* Reading Area */
+.readingArea { font-size: 1.125rem; line-height: 1.75; margin-bottom: 2rem; padding: 1.5rem; background: #f9fafb; border-radius: 1rem; border: 1px solid #f3f4f6; }
+.nounHighlight { cursor: pointer; font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 2px; transition: opacity 0.2s; }
+.nounHighlight:hover { opacity: 0.7; }
+.articleHighlight { font-weight: 700; }
+
+/* Hint */
+.hint { display: flex; align-items: center; gap: 0.5rem; color: #6b7280; font-size: 0.875rem; }
+.hintPaw { width: 1rem; height: 1rem; color: #fbbf24; }
+
+/* Modal */
+.modalOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 1rem; }
+.modalContent { background: white; border-radius: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); max-width: 28rem; width: 100%; padding: 1.5rem; border: 2px solid #fef3c7; }
+.modalHeader { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; }
+.modalTitleRow { display: flex; align-items: center; gap: 0.5rem; }
+.modalTitle { font-size: 1.5rem; font-weight: 700; font-family: 'Quicksand', sans-serif; }
+.modalInfo { font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem; }
+.modalTranslation { font-size: 0.875rem; color: #4b5563; margin-top: 0.25rem; }
+.modalActions { display: flex; gap: 0.5rem; }
+
+/* Buttons */
+.speakButton, .favoriteButton, .closeButton {
+  padding: 0.5rem; border-radius: 9999px; background: none; border: none; cursor: pointer; transition: all 0.2s; color: #9ca3af;
+}
+.speakButton:hover { color: #f59e0b; }
+.favoriteButton:hover { color: #f59e0b; background: #fffbeb; }
+.favoriteButtonActive { color: #f59e0b; background: #fffbeb; }
+.closeButton:hover { color: #4b5563; background: #f3f4f6; }
+
+/* Loading & Error */
+.loadingState { padding: 2rem 0; text-align: center; color: #6b7280; }
+.spinner { width: 2rem; height: 2rem; border: 4px solid #fbbf24; border-top-color: transparent; border-radius: 9999px; animation: spin 1s linear infinite; margin: 0 auto 0.5rem; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.errorState { border-top: 2px solid #fef3c7; padding-top: 1rem; text-align: center; color: #6b7280; }
+
+/* Declension Table */
+.declensionSection { border-top: 2px solid #fef3c7; padding-top: 1rem; }
+.declensionTitle { font-weight: 600; margin-bottom: 1rem; color: #374151; }
+.declensionTable { width: 100%; border-collapse: collapse; }
+.tableHeader { border-bottom: 2px solid #fef3c7; }
+.tableHeaderCell { text-align: left; padding: 0.5rem 0.75rem; font-weight: 600; color: #4b5563; font-size: 0.875rem; }
+.tableRow { border-bottom: 1px solid #f3f4f6; }
+.tableRowLast { border-bottom: none; }
+.tableCell { padding: 0.75rem; }
+.caseName { font-weight: 500; color: #4b5563; font-size: 0.875rem; }
+.articleCell { font-weight: 700; font-size: 1.125rem; }
+.nounFormCell { font-weight: 600; color: #1f2937; }
+
+/* Icons */
+.iconSmall { width: 1.25rem; height: 1.25rem; }
+.iconPulsing { animation: pulse 1s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }

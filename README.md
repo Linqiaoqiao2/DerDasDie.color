@@ -65,7 +65,7 @@ backend/
 
 ## Tech
 
-- Next.js 14 + TypeScript + Tailwind
+- Next.js 14 + TypeScript + CSS Modules
 - FastAPI + pdfplumber + python-docx
 - DeepSeek API for noun analysis
 - Framer Motion for animations

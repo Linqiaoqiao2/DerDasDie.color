@@ -16,6 +16,7 @@ import {
 } from 'react-icons/fi'
 import { FaStar, FaPaw } from 'react-icons/fa'
 import { LuCat } from 'react-icons/lu'
+import styles from './Icons.module.css'
 
 
 export { 
@@ -35,7 +36,7 @@ export {
 
 
 export const LoaderIcon = ({ className = "" }: { className?: string }) => (
-  <FiLoader className={`animate-spin ${className}`} />
+  <FiLoader className={`${styles.spin} ${className}`} />
 )
 
 export const StarIcon = ({ className = "", filled = false }: { className?: string; filled?: boolean }) => {
