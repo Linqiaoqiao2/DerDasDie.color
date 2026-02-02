@@ -9,6 +9,8 @@ import { useLanguage } from './i18n'
 import { CatIcon, PawIcon, StarIcon, UploadIcon, BookIcon, EditIcon, LoaderIcon } from './components/Icons'
 import styles from './page.module.css'
 
+const MAX_CHARS = 10000
+
 const pawPrintStyles = [
   styles.pawPrint1,
   styles.pawPrint2,
@@ -185,15 +187,21 @@ export default function Home() {
               <div className={styles.inputArea}>
                 <textarea
                   value={inputText}
-                  onChange={(event) => setInputText(event.target.value)}
+                  onChange={(event) => setInputText(event.target.value.slice(0, MAX_CHARS))}
                   placeholder={t.home.inputPlaceholder}
                   disabled={isAnalyzing}
                   className={styles.textarea}
+                  maxLength={MAX_CHARS}
                 />
-                <p className={styles.inputHint}>
-                  <PawIcon className={styles.iconTiny} />
-                  {t.home.inputHint}
-                </p>
+                <div className={styles.textareaFooter}>
+                  <p className={styles.inputHint}>
+                    <PawIcon className={styles.iconTiny} />
+                    {t.home.inputHint}
+                  </p>
+                  <span className={`${styles.charCount} ${inputText.length >= MAX_CHARS ? styles.charCountLimit : ''}`}>
+                    {inputText.length.toLocaleString()} / {MAX_CHARS.toLocaleString()} {t.home.characters}
+                  </span>
+                </div>
               </div>
             )}
 

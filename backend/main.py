@@ -1,10 +1,20 @@
 import io
 from pathlib import Path
 from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 import pdfplumber
 from docx import Document
 
 app = FastAPI(title="DerDieDas File Service")
+
+# 添加 CORS 中间件，允许前端访问
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 SUPPORTED_FORMATS = [".pdf", ".docx", ".txt"]
 MAX_FILE_SIZE = 10 * 1024 * 1024

@@ -21,6 +21,7 @@ export const en = {
     inputLabel: 'Enter German text',
     inputPlaceholder: 'e.g., Die Hunde spielen im Garten. Die Katze schläft auf dem Sofa.',
     inputHint: 'Tip: Paste or enter a German text, then click Analyze to see gender coloring',
+    characters: 'characters',
     analyzeButton: 'Analyze Text',
     analyzing: 'Analyzing...',
     errorEmpty: 'Please enter German text',

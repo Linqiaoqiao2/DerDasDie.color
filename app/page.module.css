@@ -69,7 +69,10 @@
 }
 .textarea:focus { outline: none; border-color: #fbbf24; box-shadow: 0 0 0 4px #fef3c7; }
 .textarea:disabled { opacity: 0.5; }
-.inputHint { color: #9ca3af; font-size: 0.875rem; margin-top: 0.5rem; display: flex; align-items: center; gap: 0.25rem; }
+.textareaFooter { display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; flex-wrap: wrap; gap: 0.5rem; }
+.inputHint { color: #9ca3af; font-size: 0.875rem; display: flex; align-items: center; gap: 0.25rem; }
+.charCount { font-size: 0.75rem; color: #9ca3af; font-variant-numeric: tabular-nums; }
+.charCountLimit { color: #f43f5e; font-weight: 600; }
 
 /* Error */
 .errorMessage {

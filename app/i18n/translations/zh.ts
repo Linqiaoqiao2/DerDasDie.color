@@ -16,13 +16,14 @@ export const zh: Translations = {
 
   // Home page
   home: {
-    title: 'DerDieDas 彩色阅读器',
+    title: 'DerDieDas',
     subtitle: '德语名词词性颜色标注阅读器',
     description: '输入德语文本，自动按词性颜色标识名词',
     vocabularyBook: '单词本 & 复习',
     inputLabel: '输入德语文本',
     inputPlaceholder: '例如：Die Hunde spielen im Garten. Die Katze schläft auf dem Sofa.',
     inputHint: '提示：粘贴或输入德语文本，然后点击"分析"查看词性颜色标注',
+    characters: '字符',
     analyzeButton: '分析文本',
     analyzing: '分析中...',
     errorEmpty: '请输入德语文本',

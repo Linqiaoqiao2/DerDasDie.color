@@ -23,6 +23,7 @@ export const de: Translations = {
     inputLabel: 'Deutschen Text eingeben',
     inputPlaceholder: 'z.B. Die Hunde spielen im Garten. Die Katze schläft auf dem Sofa.',
     inputHint: 'Tipp: Text einfügen oder eingeben, dann auf Analysieren klicken',
+    characters: 'Zeichen',
     analyzeButton: 'Text analysieren',
     analyzing: 'Analysiere...',
     errorEmpty: 'Bitte deutschen Text eingeben',
