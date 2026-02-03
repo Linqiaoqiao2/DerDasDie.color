@@ -1,7 +1,6 @@
 # DerDieDas.color 🐱
 
 > *"Why is a fork masculine, a spoon feminine, and a knife neutral?"*  
-> — Every German learner, eventually losing their mind
 
 Stop guessing. Start seeing. Paste any German text, and watch nouns light up by gender:
 - **der** → blue
